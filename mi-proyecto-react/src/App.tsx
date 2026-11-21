@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, Environment } from '@react-three/drei'
 import { type Mesh } from 'three'
 import './App.css'
@@ -7,6 +7,15 @@ import './App.css'
 function Cilindro() {
   const ref = useRef<Mesh>(null)
   const [encima, setEncima] = useState(false)
+
+  useFrame((state, delta) => {
+    if (ref.current) {
+      const t = state.clock.elapsedTime
+      ref.current.position.y = Math.sin(t * 2) * 0.4
+      ref.current.rotation.x += delta
+      ref.current.rotation.z += delta * 0.5
+    }
+  })
 
   return (
     <mesh
@@ -25,6 +34,14 @@ function Cilindro() {
 function Esfera() {
   const ref = useRef<Mesh>(null)
   const [encima, setEncima] = useState(false)
+
+  useFrame((state) => {
+    if (ref.current) {
+      const t = state.clock.elapsedTime
+      ref.current.position.x = 1.2 + Math.cos(t * 1.5) * 0.4
+      ref.current.position.y = Math.sin(t * 1.5) * 0.4
+    }
+  })
 
   return (
     <mesh
